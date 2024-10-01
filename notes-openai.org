@@ -1,0 +1,13 @@
+#+TItle: Projects with openAI API
+
+So far I have used the framework in the following manner. I have created a web interface where I can ask questions to openAi API and get responses from the same. 
+        - The way this happens is:
+          1. A route function that creates an index page which has a form that uses traditional HTML elements and collects the query to be asked.
+          2. A process function, that captures the query and with the help of a function calls the openai API with the said query
+          3. The third function is a simple function that queries openAI API.
+        - The next step is to add the following information:
+          1. An injection prompt that modifies the prompt given by the user to fit the need.
+             a. A rules file needs to be created, that captures the "injection" rules.
+             1. The rules file should store the information that is fed for future API queries as well. The simplest form is to store the rules in a text file and as soon as the rules are updated the text file is overwritten.
+* understanding Injection
+- Injection is to modify the prompt provided by the user and by doing that change the response of the LLM. A common use case if that users can ask explicit questions which the LLM should not really answer. We can provide an injection which intercepts that and retricts the user from accessing this information.
