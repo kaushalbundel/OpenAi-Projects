@@ -11,3 +11,10 @@ So far I have used the framework in the following manner. I have created a web i
              1. The rules file should store the information that is fed for future API queries as well. The simplest form is to store the rules in a text file and as soon as the rules are updated the text file is overwritten.
 * understanding Injection
 - Injection is to modify the prompt provided by the user and by doing that change the response of the LLM. A common use case if that users can ask explicit questions which the LLM should not really answer. We can provide an injection which intercepts that and retricts the user from accessing this information.
+
+* Understanding Memory
+- Memory helps in saving the information so that the same information can be retrieved at a later point, if it is needed.
+
+* Why have we used a txt file while storing the rules while using the Database for storing the results?
+
+- We can use both of these things. But I guess I am doing a production application then I would be storing the rules in a table with a relation to the user database. Its just a matter of covinience.
