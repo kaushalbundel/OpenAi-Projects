@@ -1,4 +1,4 @@
-#+TItle: Projects with openAI API
+#+Title: Projects with OpenAI API
 
 So far I have used the framework in the following manner. I have created a web interface where I can ask questions to openAi API and get responses from the same. 
         - The way this happens is:
@@ -18,3 +18,37 @@ So far I have used the framework in the following manner. I have created a web i
 * Why have we used a txt file while storing the rules while using the Database for storing the results?
 
 - We can use both of these things. But I guess I am doing a production application then I would be storing the rules in a table with a relation to the user database. Its just a matter of covinience.
+
+* In the case of image format why does the text is important?
+- Text can help us to index the image, which means that I can search an image, make modifications based on the terms that I have provided and compare this different images. This has the distinct advantage over the image which can only be embedded. 
+
+* Creating a image based project(using dalle)
+
+** Problems with images
+- Text can help us to index the image, which means that I can search an image, make modifications based on the terms that I have provided and compare this different images. This has the distinct advantage over the image which can only be embedded. 
+- Image generation cost: More often than not the generation cost of images will be quite higher 
+- Image Storage: Image needs to be stored somewhere. The images provided by OpenAI are removed after an hour. Thus we need to mechanism to store images.
+  - Storage brings the problem of the problem of nomenclature where one will have devised a naming convention for the images.
+  - Images can consume a lot of storage so one has to be careful about that as well.
+
+**  New Concepts
+- Revised Prompts: More often than not the prompts provided by user while creating images would be too vague or explicit. Thus during image generation, openAI generally modified the prompt provided by the user. The updated prompt can be accessed by the user. The user can then view this revised prompt and see what changes have been made by the OpenAI without the user awareness.
+
+** New Changes
+- Image storage
+  - Image nomenclature
+  - Image Download
+- Prompt Storage(query + revised prompt)
+- Image Prompt search
+- HTML changes
+  - How images and the content associated with them should be show on the UI?
+
+** Observations
+- There is a nice thing that the programmer has done. The programmer while creating individual programs is looking to create the UI first. This is defined by the function "index". The url of the route is also mentioned accordingly.
+- The logic of how the "index" function works is mentioned in the function, "index_process".
+- In this manner the logic is encapsulated into two separate parts. The parts make use of the functions created earlier.
+- query = f"%{query}%": Note that in this query a a f-string is common pattern for constructing a search term from a database. "%" symbol basically matches any sequence of characters including none. So for eg if we have a query named "cat", then not only all the terms with the query "cat" will get selected but terms such as "category" will also be selected. 
+  - For a single character search "_" is used,
+**  Useful Links
+
+[[https://stackoverflow.com/questions/10486224/bottle-static-files#:~:text=To%20serve%20static%20files%20using,correct%20file%20extension%20are%20accessed.][Excellent description serving links using static files]]
