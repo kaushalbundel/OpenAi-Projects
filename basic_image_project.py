@@ -51,6 +51,14 @@ def db_query(query):
     conn.close()
     return query
 
+def db_query_selectAll():
+    conn = sqlite3.connect("gallery.db")
+    cursor = conn.cursor()
+    query = cursor.execute("SELECT * FROM gallery ORDER BY filename DESC")
+    query = query.fetchall()
+    conn.close()
+    return query
+
 # Master Query for image generation
 def ai_query(query):
    images = client.images.generate(model='dall-e-3',prompt=query, n=1, quality="standard", size="1024x1024",) 
@@ -62,7 +70,7 @@ def ai_query(query):
 def download(url):
     '''Downloads tde image and saves on local and returns filename'''
     file_response = requests.get(url)
-    filename = f'{str(datetime.datetime.now())}.png'
+    filename = f'{str(datetime.datetime.isoformat(datetime.datetime.now()))}.png' # removal of space from datetime
     file_path = os.path.join(pic_directory, filename)
     with open(file_path, 'wb') as file:
         file.write(file_response.content)
@@ -91,7 +99,7 @@ def index_process():
     db_insert(prompt=query, revised_prompt=response[1], filename=filename)
     body= f'''
     Prompt: {query} <br>
-    <img style="height:400px; width:auto;" "src="{response[0]}">
+    <img style="height:400px; width:auto;" src="{response[0]}">
     <br>
     Revised Prompt:{response[1]}
 '''
@@ -102,26 +110,25 @@ def index_process():
 def index():
    form = '''
    <form action="/process_search" method="post">
-   Find: <input type="text" name="query">
+   Find Image: <input type="text" name="query">
    <br>
    <input type="submit">
    </form>
 ''' 
-   response = db_query(' ') # This query will select everything that is stored in the gallery.db
+   response = db_query_selectAll() # This query will select everything that is stored in the gallery.db
    gallery = '<div style="vertical-align:top;">'
 
    for record in response:
-       gallery = f'''
-       {gallery}
+       gallery += f'''
        <div style="display:inline-block;width:300px;height:auto;vertical-align: top;">
                     <p>{record[0]}</p>
                     <img style="width:100%;height:auto;" src="/{pic_directory}/{record[2]}">
                     <p>{record[1]}</p>
                     </div>
 '''
-       gallery = f'{gallery} </div>'
-       page = f'{header} <br> {form} <hr> {gallery}'
-       return page
+   gallery += '</div>'
+   page = f'{header} <br> {form} <hr> {gallery}'
+   return page
 
 @post('/process_search')
 def index_process():
@@ -151,9 +158,9 @@ def index_process():
     return page
 
 # route in the static path should be mentioned while working with the bottle framework because in this way all the static files can be served using the path /static (For reference: See project notes)
-@route('/dalle_pics/<filename:path>')
+@route('/dalle-pics/<filename:path>')
 def send_static(filename):
-    return static_file(filename, root = './dalle-pics/' )
+    return static_file(filename, root = './dalle-pics' ) # "/" is removed from root path mentioned
 
 db_create()
 
